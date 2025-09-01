@@ -1,86 +1,352 @@
 <?php
-$conn=mysqli_connect('localhost','id17777862_darsh_user','vdn|Bz%)=2qj1Bjc');
-mysqli_select_db($conn,'id17777862_darsh_db');
-	?>
-	<!DOCTYPE html>
-	<html lang="en">
-	<head>
-		<title>Admin-Darshanam</title>
-		<!--== META TAGS ==-->
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<!--== FAV ICON ==-->
-		<link rel="shortcut icon" href="images/fav.ico">
-		 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-		<!-- GOOGLE FONTS -->
-		<link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,600,700" rel="stylesheet">
-		
-		<!-- FONT-AWESOME ICON CSS -->
-		<link rel="stylesheet" href="css/font-awesome.min.css">
-		
-		<!--== ALL CSS FILES ==-->
-		<link rel="stylesheet" href="../asset/css/style.css">
-	</head>
-	
-	<body>
-		<!--= BODY CONTNAINER ==-->
-		<div class="container-fluid sb2">
-			
-			<div class="sb2-2">
-				<div class="sb2-2-3">
-					<div class="row">
-						<div class="col-md-12">
-							<?php
-							$sql = "SELECT * FROM contact";
-							$result = $conn->query($sql);
-							$i = 1;
-							if ($result->num_rows > 0) { ?>
-								<div class="box-inn-sp">
-									<div class="inn-title">
-										<h4 class="text-center my-4">Contacts List</h4>
-									</div>
-									<div class="tab-inn">
-										<div class="table-responsive table-desi">
-											<table class="table table-hover" border="1">
-												<thead>
-												<tr>
-													<th>Id</th>
-													<th>Name</th>
-													<th>Email</th>
-													<th>Subject</th>
-													<th>Message</th>
-												</tr>
-												</thead>
-												<tbody>
-												<?php while ($row = $result->fetch_array()) { ?>
-													<tr>
-														<td><?php echo $i;
-															$i++; ?>
-														</td>
-														<td><?php echo $row['name']; ?></td>
-														<td><?php echo $row['email']; ?></td>
-														<td><?php echo $row['subject']; ?></td>
-														<td><?php echo $row['message']; ?></td>
-													</tr>
-												<?php } ?>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-							<?php } else { ?>
-								<h3 class="text-center">Sorry, no order to display.</h3>
-							<?php } ?>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<!--== BOTTOM FLOAT ICON ==-->
-		
-		<!--======== SCRIPT FILES =========-->
-	
-	</body>
-	
-	</html>
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['admin_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
+require_once '../config/database.php';
+
+// Handle status updates
+if ($_POST['action'] ?? '' === 'update_status') {
+    $contact_id = (int)($_POST['contact_id'] ?? 0);
+    $status = $_POST['status'] ?? 'unread';
+    
+    try {
+        $database = new Database();
+        $conn = $database->getConnection();
+        
+        $query = "UPDATE contacts SET status = :status WHERE id = :id";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':id', $contact_id);
+        $stmt->execute();
+        
+        echo json_encode(['success' => true]);
+        exit;
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        exit;
+    }
+}
+
+// Get contacts with pagination
+$page = (int)($_GET['page'] ?? 1);
+$limit = 10;
+$offset = ($page - 1) * $limit;
+
+try {
+    $database = new Database();
+    $conn = $database->getConnection();
+    
+    // Get total count
+    $count_query = "SELECT COUNT(*) as total FROM contacts";
+    $count_stmt = $conn->prepare($count_query);
+    $count_stmt->execute();
+    $total_contacts = $count_stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    $total_pages = ceil($total_contacts / $limit);
+    
+    // Get contacts
+    $query = "SELECT * FROM contacts ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Get stats
+    $stats_query = "SELECT 
+        COUNT(*) as total,
+        SUM(CASE WHEN status = 'unread' THEN 1 ELSE 0 END) as unread,
+        SUM(CASE WHEN status = 'read' THEN 1 ELSE 0 END) as read,
+        SUM(CASE WHEN DATE(created_at) = CURDATE() THEN 1 ELSE 0 END) as today
+        FROM contacts";
+    $stats_stmt = $conn->prepare($stats_query);
+    $stats_stmt->execute();
+    $stats = $stats_stmt->fetch(PDO::FETCH_ASSOC);
+    
+} catch (Exception $e) {
+    $error = "Database error: " . $e->getMessage();
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.8);
+            transition: all 0.3s ease;
+        }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            color: white;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .status-unread {
+            background-color: #ffeaa7;
+            color: #d63031;
+        }
+        .status-read {
+            background-color: #00b894;
+            color: white;
+        }
+        .btn-action {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar p-0">
+                <div class="p-3">
+                    <h4><i class="fas fa-user-shield"></i> Admin Panel</h4>
+                    <hr style="border-color: rgba(255,255,255,0.3);">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contacts"><i class="fas fa-envelope"></i> Contact Messages</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Dashboard</h2>
+                    <div>
+                        <span class="text-muted">Welcome, <?php echo htmlspecialchars($_SESSION['admin_username']); ?></span>
+                        <a href="logout.php" class="btn btn-outline-danger btn-sm ms-2">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="stats-card text-center">
+                            <i class="fas fa-envelope fa-2x text-primary mb-2"></i>
+                            <h3><?php echo $stats['total'] ?? 0; ?></h3>
+                            <p class="text-muted">Total Messages</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card text-center">
+                            <i class="fas fa-envelope-open fa-2x text-warning mb-2"></i>
+                            <h3><?php echo $stats['unread'] ?? 0; ?></h3>
+                            <p class="text-muted">Unread</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card text-center">
+                            <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                            <h3><?php echo $stats['read'] ?? 0; ?></h3>
+                            <p class="text-muted">Read</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card text-center">
+                            <i class="fas fa-calendar-day fa-2x text-info mb-2"></i>
+                            <h3><?php echo $stats['today'] ?? 0; ?></h3>
+                            <p class="text-muted">Today</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contacts Table -->
+                <div class="table-container" id="contacts">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4><i class="fas fa-envelope"></i> Contact Messages</h4>
+                        <button class="btn btn-primary btn-sm" onclick="location.reload()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+
+                    <?php if (isset($error)): ?>
+                        <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+                    <?php elseif (empty($contacts)): ?>
+                        <div class="text-center py-5">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No messages yet</h5>
+                            <p class="text-muted">Contact messages will appear here when submitted.</p>
+                        </div>
+                    <?php else: ?>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Subject</th>
+                                        <th>Message</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($contacts as $contact): ?>
+                                        <tr>
+                                            <td><?php echo $contact['id']; ?></td>
+                                            <td><?php echo htmlspecialchars($contact['name']); ?></td>
+                                            <td>
+                                                <a href="mailto:<?php echo htmlspecialchars($contact['email']); ?>">
+                                                    <?php echo htmlspecialchars($contact['email']); ?>
+                                                </a>
+                                            </td>
+                                            <td><?php echo htmlspecialchars($contact['subject']); ?></td>
+                                            <td>
+                                                <button class="btn btn-link btn-sm p-0" onclick="showMessage(<?php echo $contact['id']; ?>, '<?php echo htmlspecialchars(addslashes($contact['message'])); ?>')">
+                                                    <?php echo substr(htmlspecialchars($contact['message']), 0, 50) . '...'; ?>
+                                                </button>
+                                            </td>
+                                            <td><?php echo date('M j, Y H:i', strtotime($contact['created_at'])); ?></td>
+                                            <td>
+                                                <span class="status-badge status-<?php echo $contact['status']; ?>">
+                                                    <?php echo ucfirst($contact['status']); ?>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <?php if ($contact['status'] === 'unread'): ?>
+                                                    <button class="btn btn-success btn-action" onclick="updateStatus(<?php echo $contact['id']; ?>, 'read')">
+                                                        <i class="fas fa-check"></i> Mark Read
+                                                    </button>
+                                                <?php else: ?>
+                                                    <button class="btn btn-warning btn-action" onclick="updateStatus(<?php echo $contact['id']; ?>, 'unread')">
+                                                        <i class="fas fa-undo"></i> Mark Unread
+                                                    </button>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <?php if ($total_pages > 1): ?>
+                            <nav class="mt-3">
+                                <ul class="pagination justify-content-center">
+                                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                        <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
+                                            <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                        </li>
+                                    <?php endfor; ?>
+                                </ul>
+                            </nav>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    <script>
+        function showMessage(id, message) {
+            Swal.fire({
+                title: 'Message #' + id,
+                text: message,
+                icon: 'info',
+                confirmButtonText: 'Close',
+                confirmButtonColor: '#667eea'
+            });
+        }
+
+        function updateStatus(contactId, status) {
+            const formData = new FormData();
+            formData.append('action', 'update_status');
+            formData.append('contact_id', contactId);
+            formData.append('status', status);
+
+            fetch('', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Status updated successfully',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: data.message || 'Failed to update status',
+                        icon: 'error',
+                        confirmButtonColor: '#667eea'
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Network error occurred',
+                    icon: 'error',
+                    confirmButtonColor: '#667eea'
+                });
+            });
+        }
+    </script>
+</body>
+</html>

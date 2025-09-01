@@ -1,0 +1,324 @@
+%%%%
+% Deepak Kumar's Resume
+%%%%
+% Author: Deepak Kumar
+% License: CC-BY-4
+% - https://creativecommons.org/licenses/by/4.0/legalcode.txt
+%%%%
+
+\documentclass[letterpaper,10pt]{article}
+%%%%%%%%%%%%%%%%%%%%%%%
+%% BEGIN_FILE: deepal.sty
+%% NOTE: Everything between here and END_FILE can
+%% be relocated to "mteck.sty" and then included with:
+%\usepackage{deepak}
+
+% Dependencies
+% NOTE: Some packages (lastpage, hyperref) require second build!
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\usepackage{bookmark}
+\usepackage{lastpage}
+
+% Sans-Serif
+%\usepackage[sfdefault]{FiraSans}
+%\usepackage[sfdefault]{roboto}
+%\usepackage[sfdefault]{noto-sans}
+%\usepackage[default]{sourcesanspro}
+
+% Serif
+\usepackage{CormorantGaramond}
+\usepackage{charter}
+
+% Colors
+% Use with \color{Name}
+% Can wrap entire heading with {\color{accent} [...] }
+\usepackage{xcolor}
+\definecolor{accentTitle}{HTML}{0e6e55}
+\definecolor{accentText}{HTML}{0e6e55}
+\definecolor{accentLine}{HTML}{a16f0b}
+
+% Misc. Options
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\urlstyle{same}
+
+% Adjust Margins
+\addtolength{\oddsidemargin}{-0.7in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-0.7in}
+\addtolength{\textheight}{1.4in}
+
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\setlength{\tabcolsep}{0pt}
+\setlength{\footskip}{3.7pt}
+\raggedbottom
+\raggedright
+
+% ATS Readability
+\input{glyphtounicode}
+\pdfgentounicode=1
+
+%-----------------%
+% Custom Commands %
+%-----------------%
+
+% Centered title along with subtitle between HR
+% Usage: \documentTitle{Name}{Details}
+\newcommand{\documentTitle}[2]{
+  \begin{center}
+    {\Huge\color{accentTitle} #1}
+    \vspace{10pt}
+    {\color{accentLine} \hrule}
+    \vspace{2pt}
+    %{\footnotesize\color{accentTitle} #2}
+    \footnotesize{#2}
+    \vspace{2pt}
+    {\color{accentLine} \hrule}
+  \end{center}
+}
+
+% Create a footer with correct padding
+% Usage: \documentFooter{\thepage of X}
+\newcommand{\documentFooter}[1]{
+  \setlength{\footskip}{10.25pt}
+  \fancyfoot[C]{\footnotesize #1}
+}
+
+% Simple wrapper to set up page numbering
+% Usage: \numberedPages
+% WARNING: Must run pdflatex twice!
+\newcommand{\numberedPages}{
+  \documentFooter{\thepage/\pageref{LastPage}}
+}
+
+% Section heading with horizontal rule
+% Usage: \section{Title}
+\titleformat{\section}{
+  \vspace{-5pt}
+  \color{accentText}
+  \raggedright\large\bfseries
+}{}{0em}{}[\color{accentLine}\titlerule]
+
+% Section heading with separator and content on same line
+% Usage: \tinysection{Title}
+\newcommand{\tinysection}[1]{
+  \phantomsection
+  \addcontentsline{toc}{section}{#1}
+  {\large{\bfseries\color{accentText}#1} {\color{accentLine} |}}
+}
+
+% Indented line with arguments left/right aligned in document
+% Usage: \heading{Left}{Right}
+\newcommand{\heading}[2]{
+  \hspace{10pt}#1\hfill#2\\
+}
+
+% Adds \textbf to \heading
+\newcommand{\headingBf}[2]{
+  \heading{\textbf{#1}}{\textbf{#2}}
+}
+
+% Adds \textit to \heading
+\newcommand{\headingIt}[2]{
+  \heading{\textit{#1}}{\textit{#2}}
+}
+
+% Template for itemized lists
+% Usage: \begin{resume_list} [items] \end{resume_list}
+\newenvironment{resume_list}{
+  \vspace{-7pt}
+  \begin{itemize}[itemsep=-2px, parsep=1pt, leftmargin=30pt]
+}{
+  \end{itemize}
+  %\vspace{-2pt}
+}
+
+% Formats an item to use as an itemized title
+% Usage: \itemTitle{Title}
+\newcommand{\itemTitle}[1]{
+  \item[] \underline{#1}\vspace{4pt}
+}
+
+% Bullets used in itemized lists
+\renewcommand\labelitemi{--}
+
+%% END_FILE: mteck.sty
+%%%%%%%%%%%%%%%%%%%%%%
+
+
+%===================%
+% John Doe's Resume %
+%===================%
+
+%\numberedPages % NOTE: lastpage requires a second build
+%\documentFooter{\thepage of 2} % Does similar without using lastpage
+\begin{document}
+
+  %---------%
+  % Heading %
+  %---------%
+
+  \documentTitle{Deepak Kumar}{
+    % Web Version
+    % \raisebox{-0.05\height} \faPhone\ [redacted - web copy] ~
+    % \raisebox{-0.15\height} \faEnvelope\ [redacted - web copy] ~
+    %%
+    \href{tel:9149062438}{
+      \raisebox{-0.05\height} \faPhone\ 9955935796} ~ | ~
+    \href{mailto:deepakkumar2781999@gmail.com}{
+      \raisebox{-0.15\height} \faEnvelope\ deepakkumar2781999@gmail.com} ~ | ~
+    \href{https://www.linkedin.com/in/deepak-kumar-0718681a9/}{
+      \raisebox{-0.15\height} \faLinkedin\ linkedin.com} ~ | ~
+    \href{https://github.com/developer278}{
+      \raisebox{-0.15\height} \faGithub\ github.com/Deepak
+}
+  }
+
+  %---------%
+  % Summary %
+  %---------%
+
+\tinysection{Professional Summary}  
+Results-driven Full-Stack Developer with 3+ years of experience in designing and optimizing enterprise web applications. Skilled in \textbf{Laravel/PHP}, \textbf{CI}, and \textbf{JavaScript}, with a strong focus on RESTful API optimization  and cloud migration . Key contributions include developing high-performance platforms like Suzuki Motorcycle and CXO Steps, integrating secure video solutions with ZOOM,Twilio and Agora.
+
+
+  %--------%
+  % Skills %
+  %--------%
+
+\section{Skills}
+
+\begin{multicols}{2}
+  \begin{itemize}[itemsep=-2px, parsep=1pt, leftmargin=75pt]
+\item[\textbf{Languages}] PHP, JavaScript ,Python
+\item[\textbf{Frameworks}] Laravel, CI ,Flask ,Smarty template
+\item[\textbf{Version Control}] Git, GitHub, GitLab
+\item[\textbf{OS}] Ubuntu, Windows
+\item[\textbf{ORMs}] Eloquent
+\item[\textbf{DBMS}] MySQL, PostgreSQL
+\item[\textbf{Payment Gateways}] Stripe, Razorpay, PhonePe ,paypal,CCAvenue
+\item[\textbf{Tools}]  FileZilla, CPanel , PostgreSQL, SSH, CICD, Jenkins, SonarQube ,S3 ,R2 , ElasticSearch
+  \end{itemize}
+\end{multicols}
+
+  %----------------------------%
+  % Extracurricular Activities %
+  %----------------------------%
+\section{Projects}
+
+\headingBf{https://www.ebgsolutions.com}{}
+\begin{resume_list}
+    \item Reverse engineered and documented complex legacy modules to establish a clean, scalable system architecture across vendor and booking platforms powering over \textbf{900 affiliate sites}.
+    \item Led end-to-end development and debugging of the \textbf{Gift Card } and \textbf{Ticket Product} modules, integrating external APIs, handling cron-based syncs, and ensuring accurate booking flows.
+    \item Collaborated on the design of admin panel tools to manage vendors, taxes, ticket availability, pricing logic, and marketing campaigns with dynamic UI elements.
+    \item Streamlined third-party integrations (e.g., POS, RecAPI, Car Rentals), significantly improving data handling and automation via cron jobs and API workflows.
+    \item Improved frontend booking and checkout UX by contributing to refactoring of product listing, cart, and order flows, enhancing performance and reducing friction.
+    \item Actively involved in cross-functional R\&D tasks to identify bottlenecks and propose solutions (e.g., video processing, campaign tracking, accounting module recovery).
+\end{resume_list}
+
+
+
+\headingBf{www.Swimcapz.com}{}
+\begin{resume_list}
+    \item Led the design and implementation of the Admin panel, streamlining content management and reducing admin workload by 20%.
+    \item Improved real-time interactivity with \textbf{JavaScript}, reducing response times by 25% and boosting user engagement.
+    \item Spearheaded the migration to a new platform architecture, ensuring a seamless transition with minimal downtime.
+\end{resume_list}
+
+\headingBf{www.cxosteps.com}{}
+\begin{resume_list}
+    \item Led the development of CXO Steps, an online session platform built with \textbf{Laravel} and Zoom SDK integration, enhancing user interactivity.
+    \item Ensured maintainability and scalability through \textbf{SCP (Software Coding Practices)}, delivering high-quality results ahead of schedule.
+\end{resume_list}
+
+
+\headingBf{www.suzukimotorcycle.co.in}{}
+\begin{resume_list}
+    \item Contributed to feature development and versioning for Suzuki Motorcycle, a leading automobile company, ensuring seamless integration of innovative functionalities and system enhancements.
+\end{resume_list}
+
+\headingBf{HLS Video Processing Tool}{}
+\begin{resume_list}
+    \item Developed a powerful \textbf{Python-based video processing tool} for HLS (HTTP Live Streaming) players, enhancing video playback and compatibility across multiple applications.
+    \item Engineered efficient \textbf{video encoding, segmenting, and transcoding} mechanisms to optimize streaming performance.
+    \item Implemented automated workflows for \textbf{adaptive bitrate streaming}, ensuring seamless playback across various network conditions.
+    \item The tool is currently utilized in multiple applications, improving \textbf{scalability and reliability} for media streaming services.
+\end{resume_list}
+
+
+
+
+
+\headingBf{Bluvial App}{}
+\begin{resume_list}
+    \item Developed Bluvial, a laboratory service platform built with CodeIgniter, enabling users to book body tests and schedule appointments online.
+    \item Focused on creating a user-friendly interface and streamlining appointment scheduling to enhance accessibility and convenience for patients.
+\end{resume_list}
+
+
+\headingBf{manastha.com}{}
+\begin{resume_list}
+    \item Contributed to the development of Manastha, a mental health platform for patient sessions, implementing Twilio for secure, high-quality video interactions.
+    \item Focused on optimizing user experience and ensuring reliable, HIPAA-compliant video sessions to support patient-therapist engagement.
+\end{resume_list}
+
+
+
+
+
+\section{Experience}
+
+\section{Professional Experience}
+
+\headingBf{SparxIT Solutions Pvt. Ltd.}{Jan 2023 -- Present}
+\headingIt{Senior Software Engineer (PHP Developer)}{}
+\begin{resume_list}
+    \item Built 15+ scalable web applications using Laravel/PHP, handling 500+ daily users
+    \item Designed RESTful APIs for CXO Steps platform with Zoom integration (40% latency reduction)
+    \item Migrated Suzuki Motorcycle's legacy system to modern architecture (30% faster processing)
+    \item Implemented Twilio video solutions for healthcare platform serving 1K+ monthly sessions
+    \item Optimized MySQL queries reducing API response time from 800ms to 200ms
+    \item Automated deployments using Jenkins CI/CD, cutting release time by 75%
+\end{resume_list}
+
+\headingBf{Dakshith Technologies Pvt. Ltd.}{Jul 2022 -- Dec 2022}
+\headingIt{Software Engineer}{}
+\begin{resume_list}
+    \item Created hybrid e-commerce apps using Cordova for iOS/Android platforms
+    \item Developed 10+ REST APIs for mobile-backend communication
+    \item Enhanced app performance by 25% through code optimization
+\end{resume_list}
+
+\headingBf{Asian Nutritions Pvt. Ltd.}{Mar 2022 -- Jul 2022}
+\headingIt{Software Engineer Intern}{}
+\begin{resume_list}
+    \item Contributed to full-stack development of inventory management system
+    \item Integrated payment APIs handling 200+ daily transactions
+    \item Assisted in digital marketing campaigns increasing engagement by 15%
+\end{resume_list}
+
+  %-----------%
+  % Education %
+  %-----------%
+\section{Education}
+
+\headingBf{Dr. A. P. J. Abdul Kalam Technical University, Lucknow}{Jul 2018 -- Jul 2022}  
+\headingIt{Bachelor of Technology in Computer Science Engineering}{}  
+\begin{resume_list}
+    \item Achieved a cumulative CGPA of \textbf{7.77/10}.
+    \item Gained in-depth knowledge in \textbf{Data Structures, Algorithms, Database Management Systems, and Web Development}.
+    \item Developed strong problem-solving skills through \textbf{competitive programming} and hands-on projects.
+\end{resume_list}
+
+\end{document}

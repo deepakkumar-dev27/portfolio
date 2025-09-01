@@ -254,3 +254,153 @@
     });
 
 })()
+
+/**
+ * Dark Mode Toggle
+ */
+document.addEventListener('DOMContentLoaded', function() {
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+  const body = document.body;
+
+  // Check for saved theme preference or default to light mode
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  body.setAttribute('data-theme', currentTheme);
+  
+  // Update icon based on current theme
+  updateThemeIcon(currentTheme);
+
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      const currentTheme = body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      body.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon(newTheme);
+    });
+  }
+
+  function updateThemeIcon(theme) {
+    if (themeIcon) {
+      if (theme === 'dark') {
+        themeIcon.className = 'bx bx-sun';
+      } else {
+        themeIcon.className = 'bx bx-moon';
+      }
+    }
+  }
+});
+
+/**
+ * Enhanced Scroll Animations
+ */
+window.addEventListener('scroll', function() {
+  const scrolled = window.pageYOffset;
+  const parallax = document.querySelector('#hero');
+  
+  if (parallax) {
+    const speed = scrolled * 0.5;
+    parallax.style.transform = `translateY(${speed}px)`;
+  }
+});
+
+/**
+ * Contact Form Handler
+ */
+document.addEventListener('DOMContentLoaded', function() {
+  const contactForm = document.getElementById('contact-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const loadingDiv = document.querySelector('.loading');
+  const errorDiv = document.getElementById('error-message');
+  const successDiv = document.getElementById('sent-message');
+
+  if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Reset messages
+      hideMessages();
+      
+      // Show loading
+      loadingDiv.style.display = 'block';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      
+      // Prepare form data
+      const formData = new FormData(contactForm);
+      
+      // Send AJAX request
+      fetch('forms/contact.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        loadingDiv.style.display = 'none';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+        
+        if (data.success) {
+          successDiv.textContent = data.message;
+          successDiv.style.display = 'block';
+          contactForm.reset();
+          
+          // Show success alert
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'success',
+              title: 'Message Sent!',
+              text: data.message,
+              confirmButtonColor: '#149ddd'
+            });
+          } else {
+            alert('✅ ' + data.message);
+          }
+        } else {
+          errorDiv.textContent = data.message;
+          errorDiv.style.display = 'block';
+          
+          // Show error alert
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: data.message,
+              confirmButtonColor: '#149ddd'
+            });
+          } else {
+            alert('❌ ' + data.message);
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        loadingDiv.style.display = 'none';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+        
+        const errorMessage = 'An error occurred while sending your message. Please try again.';
+        errorDiv.textContent = errorMessage;
+        errorDiv.style.display = 'block';
+        
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Connection Error!',
+            text: errorMessage,
+            confirmButtonColor: '#149ddd'
+          });
+        } else {
+          alert('❌ ' + errorMessage);
+        }
+      });
+    });
+  }
+  
+  function hideMessages() {
+    loadingDiv.style.display = 'none';
+    errorDiv.style.display = 'none';
+    successDiv.style.display = 'none';
+  }
+});

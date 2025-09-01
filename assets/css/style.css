@@ -36,6 +36,224 @@ h6 {
 
 
 /*--------------------------------------------------------------
+# Dark Mode Variables
+--------------------------------------------------------------*/
+
+:root {
+    --bg-color: #fff;
+    --text-color: #272829;
+    --card-bg: #fff;
+    --border-color: #e9ecef;
+    --accent-color: #149ddd;
+    --sidebar-bg: #040b14;
+}
+
+[data-theme="dark"] {
+    --bg-color: #1a1a1a;
+    --text-color: #e0e0e0;
+    --card-bg: #2d2d2d;
+    --border-color: #404040;
+    --accent-color: #37b3ed;
+    --sidebar-bg: #0a0a0a;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/*--------------------------------------------------------------
+# Theme Toggle
+--------------------------------------------------------------*/
+
+.theme-toggle {
+    text-align: center;
+}
+
+#theme-toggle {
+    border: 1px solid rgba(255,255,255,0.3);
+    background: transparent;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+#theme-toggle:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: white;
+}
+
+/*--------------------------------------------------------------
+# Modern Projects Section
+--------------------------------------------------------------*/
+
+.portfolio-item {
+    margin-bottom: 30px;
+}
+
+.portfolio-wrap {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    height: 100%;
+    border: 1px solid var(--border-color);
+}
+
+.portfolio-wrap:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.portfolio-info h4 {
+    color: var(--accent-color);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.portfolio-info p {
+    color: var(--text-color);
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    opacity: 0.8;
+}
+
+.portfolio-links {
+    margin-bottom: 20px;
+}
+
+.portfolio-link {
+    display: inline-block;
+    background: var(--accent-color);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.portfolio-link:hover {
+    background: #37b3ed;
+    transform: scale(1.1);
+    color: white;
+}
+
+.portfolio-details ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.portfolio-details ul li {
+    padding: 5px 0;
+    padding-left: 20px;
+    position: relative;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.portfolio-details ul li:before {
+    content: "▶";
+    color: var(--accent-color);
+    position: absolute;
+    left: 0;
+    font-size: 0.8rem;
+}
+
+.tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tech-tag {
+    background: linear-gradient(135deg, var(--accent-color), #37b3ed);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/*--------------------------------------------------------------
+# Enhanced Animations
+--------------------------------------------------------------*/
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.portfolio-item {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.portfolio-item:nth-child(1) { animation-delay: 0.1s; }
+.portfolio-item:nth-child(2) { animation-delay: 0.2s; }
+.portfolio-item:nth-child(3) { animation-delay: 0.3s; }
+.portfolio-item:nth-child(4) { animation-delay: 0.4s; }
+.portfolio-item:nth-child(5) { animation-delay: 0.5s; }
+.portfolio-item:nth-child(6) { animation-delay: 0.6s; }
+
+/*--------------------------------------------------------------
+# Enhanced Skills Section
+--------------------------------------------------------------*/
+
+.progress-bar-wrap {
+    background: var(--border-color);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: linear-gradient(135deg, var(--accent-color), #37b3ed);
+    border-radius: 10px;
+    transition: width 2s ease;
+}
+
+/*--------------------------------------------------------------
+# Dark Mode Enhancements
+--------------------------------------------------------------*/
+
+[data-theme="dark"] .section-bg {
+    background: #1f1f1f;
+}
+
+[data-theme="dark"] .resume-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+[data-theme="dark"] #header {
+    background: var(--sidebar-bg);
+}
+
+[data-theme="dark"] .nav-menu a {
+    color: rgba(255,255,255,0.8);
+}
+
+[data-theme="dark"] .nav-menu a:hover,
+[data-theme="dark"] .nav-menu .active {
+    color: var(--accent-color);
+}
+
+/*--------------------------------------------------------------
 # Back to top button
 --------------------------------------------------------------*/
 
@@ -46,7 +264,7 @@ h6 {
     right: 15px;
     bottom: 15px;
     z-index: 996;
-    background: #149ddd;
+    background: var(--accent-color);
     width: 40px;
     height: 40px;
     border-radius: 50px;
