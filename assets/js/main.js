@@ -293,16 +293,418 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
- * Enhanced Scroll Animations
+ * Enhanced Interactive Animations
  */
+
+// Particle animation for hero section
+function createParticles() {
+  const hero = document.querySelector('#hero');
+  if (!hero) return;
+
+  for (let i = 0; i < 50; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.cssText = `
+      position: absolute;
+      width: ${Math.random() * 4 + 1}px;
+      height: ${Math.random() * 4 + 1}px;
+      background: rgba(20, 157, 221, ${Math.random() * 0.5 + 0.2});
+      border-radius: 50%;
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      animation: float ${Math.random() * 6 + 4}s ease-in-out infinite;
+      animation-delay: ${Math.random() * 2}s;
+    `;
+    hero.appendChild(particle);
+  }
+}
+
+// Typing animation enhancement
+function enhancedTypingEffect() {
+  const typed = document.querySelector('.typed');
+  if (typed) {
+    typed.addEventListener('DOMSubtreeModified', function() {
+      this.style.borderRight = '2px solid #149ddd';
+      this.style.animation = 'blink 1s infinite';
+    });
+  }
+}
+
+// Skill bars animation on scroll
+function animateSkillBars() {
+  const skillBars = document.querySelectorAll('.progress-bar');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const bar = entry.target;
+        const width = bar.getAttribute('aria-valuenow') + '%';
+        bar.style.width = '0%';
+        setTimeout(() => {
+          bar.style.width = width;
+          bar.style.transition = 'width 2s ease-in-out';
+        }, 200);
+      }
+    });
+  });
+
+  skillBars.forEach(bar => observer.observe(bar));
+}
+
+// Interactive card hover effects
+function addCardInteractions() {
+  const cards = document.querySelectorAll('.portfolio-wrap, .resume-item, .stats-card');
+  
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-10px) scale(1.02)';
+      this.style.boxShadow = '0 20px 40px rgba(0,0,0,0.15)';
+      this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+    });
+
+    card.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0) scale(1)';
+      this.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
+    });
+  });
+}
+
+// Smooth scroll with easing
+function smoothScrolling() {
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+}
+
+// Counter animation for stats
+function animateCounters() {
+  const counters = document.querySelectorAll('.counter');
+  
+  counters.forEach(counter => {
+    const target = parseInt(counter.getAttribute('data-target'));
+    const increment = target / 100;
+    let current = 0;
+    
+    const updateCounter = () => {
+      if (current < target) {
+        current += increment;
+        counter.textContent = Math.ceil(current);
+        requestAnimationFrame(updateCounter);
+      } else {
+        counter.textContent = target;
+      }
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        updateCounter();
+        observer.disconnect();
+      }
+    });
+    
+    observer.observe(counter);
+  });
+}
+
+// Parallax scrolling effects
 window.addEventListener('scroll', function() {
   const scrolled = window.pageYOffset;
   const parallax = document.querySelector('#hero');
   
   if (parallax) {
-    const speed = scrolled * 0.5;
+    const speed = scrolled * 0.3;
     parallax.style.transform = `translateY(${speed}px)`;
   }
+
+  // Navbar background on scroll
+  const navbar = document.querySelector('#header');
+  if (navbar) {
+    if (scrolled > 100) {
+      navbar.style.background = 'rgba(4, 11, 20, 0.95)';
+      navbar.style.backdropFilter = 'blur(10px)';
+    } else {
+      navbar.style.background = '#040b14';
+      navbar.style.backdropFilter = 'none';
+    }
+  }
+});
+
+// Image placeholder interactions
+function addImagePlaceholderEffects() {
+  const placeholders = document.querySelectorAll('.img-placeholder');
+  
+  placeholders.forEach(placeholder => {
+    placeholder.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-5px) scale(1.02)';
+      this.style.borderColor = '#149ddd';
+    });
+    
+    placeholder.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0) scale(1)';
+      this.style.borderColor = '#ccc';
+    });
+    
+    // Add click animation
+    placeholder.addEventListener('click', function() {
+      this.style.animation = 'bounce 0.6s ease';
+      setTimeout(() => {
+        this.style.animation = '';
+      }, 600);
+    });
+  });
+}
+
+// Enhanced navigation animations
+function enhanceNavigation() {
+  const navLinks = document.querySelectorAll('#navbar a');
+  
+  navLinks.forEach(link => {
+    link.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateX(10px)';
+      this.style.color = '#149ddd';
+    });
+    
+    link.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateX(0)';
+      this.style.color = '';
+    });
+  });
+}
+
+// Button ripple effects
+function addRippleEffects() {
+  const buttons = document.querySelectorAll('.btn, .portfolio-link, .social-links a');
+  
+  buttons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      const ripple = document.createElement('span');
+      const rect = this.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const x = e.clientX - rect.left - size / 2;
+      const y = e.clientY - rect.top - size / 2;
+      
+      ripple.style.cssText = `
+        position: absolute;
+        width: ${size}px;
+        height: ${size}px;
+        left: ${x}px;
+        top: ${y}px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        transform: scale(0);
+        animation: ripple 0.6s ease-out;
+        pointer-events: none;
+      `;
+      
+      this.style.position = 'relative';
+      this.style.overflow = 'hidden';
+      this.appendChild(ripple);
+      
+      setTimeout(() => {
+        ripple.remove();
+      }, 600);
+    });
+  });
+}
+
+// Scroll reveal animations
+function addScrollRevealAnimations() {
+  const elements = document.querySelectorAll('.section-title, .portfolio-item, .resume-item');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        entry.target.style.transition = 'all 0.6s ease';
+      }
+    });
+  }, { threshold: 0.1 });
+  
+  elements.forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    observer.observe(el);
+  });
+}
+
+// Crazy Submit Button Logic
+function initializeCrazySubmitButton() {
+  const form = document.getElementById('contact-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const validationStatus = document.querySelector('.form-validation-status');
+  const inputs = form.querySelectorAll('input[required], textarea[required]');
+  
+  let isFormValid = false;
+  let mouseX = 0;
+  let mouseY = 0;
+  
+  // Track mouse position
+  document.addEventListener('mousemove', function(e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+  
+  // Validation function
+  function validateForm() {
+    let allValid = true;
+    
+    inputs.forEach(input => {
+      const value = input.value.trim();
+      const minLength = input.getAttribute('minlength') || 0;
+      
+      if (!value || value.length < minLength) {
+        allValid = false;
+      }
+      
+      if (input.type === 'email' && value) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          allValid = false;
+        }
+      }
+    });
+    
+    isFormValid = allValid;
+    
+    if (allValid) {
+      submitBtn.disabled = false;
+      submitBtn.querySelector('.btn-text').innerHTML = '<i class="fas fa-rocket"></i> Send Message';
+      validationStatus.classList.add('hidden');
+      validationStatus.querySelector('.validation-text').textContent = 'Ready to send!';
+      validationStatus.querySelector('.validation-text').style.color = '#27ae60';
+    } else {
+      submitBtn.disabled = true;
+      validationStatus.classList.remove('hidden');
+      validationStatus.querySelector('.validation-text').textContent = 'Complete all fields to unlock the button!';
+      validationStatus.querySelector('.validation-text').style.color = '#e74c3c';
+    }
+  }
+  
+  // Button escape logic
+  function makeButtonRunAway() {
+    if (isFormValid) return;
+    
+    const btnRect = submitBtn.getBoundingClientRect();
+    const btnCenterX = btnRect.left + btnRect.width / 2;
+    const btnCenterY = btnRect.top + btnRect.height / 2;
+    
+    const distance = Math.sqrt(
+      Math.pow(mouseX - btnCenterX, 2) + Math.pow(mouseY - btnCenterY, 2)
+    );
+    
+    // If mouse is too close and form is invalid, move button
+    if (distance < 100 && !isFormValid) {
+      const container = submitBtn.parentElement;
+      const containerRect = container.getBoundingClientRect();
+      
+      // Calculate escape direction (opposite to mouse)
+      const escapeX = btnCenterX - mouseX;
+      const escapeY = btnCenterY - mouseY;
+      
+      // Normalize and multiply by escape distance
+      const magnitude = Math.sqrt(escapeX * escapeX + escapeY * escapeY);
+      const normalizedX = (escapeX / magnitude) * 80;
+      const normalizedY = (escapeY / magnitude) * 40;
+      
+      // Apply bounds to keep button in container
+      const maxX = containerRect.width - btnRect.width;
+      const maxY = containerRect.height - btnRect.height;
+      
+      let newX = Math.max(0, Math.min(maxX, btnRect.left - containerRect.left + normalizedX));
+      let newY = Math.max(0, Math.min(maxY, btnRect.top - containerRect.top + normalizedY));
+      
+      submitBtn.style.position = 'absolute';
+      submitBtn.style.left = newX + 'px';
+      submitBtn.style.top = newY + 'px';
+      submitBtn.style.transform = `rotate(${Math.random() * 20 - 10}deg) scale(0.9)`;
+      
+      // Add shake effect
+      submitBtn.style.animation = 'button-run-away 0.8s ease-out';
+      
+      setTimeout(() => {
+        submitBtn.style.animation = '';
+      }, 800);
+    }
+  }
+  
+  // Reset button position when form becomes valid
+  function resetButtonPosition() {
+    if (isFormValid) {
+      submitBtn.style.position = 'relative';
+      submitBtn.style.left = 'auto';
+      submitBtn.style.top = 'auto';
+      submitBtn.style.transform = 'none';
+    }
+  }
+  
+  // Add event listeners
+  inputs.forEach(input => {
+    input.addEventListener('input', validateForm);
+    input.addEventListener('blur', validateForm);
+  });
+  
+  // Mouse move listener for button escape
+  document.addEventListener('mousemove', makeButtonRunAway);
+  
+  // Form validation on change
+  form.addEventListener('input', () => {
+    validateForm();
+    resetButtonPosition();
+  });
+  
+  // Initial validation
+  validateForm();
+}
+
+// Enhanced form input animations
+function enhanceFormInputs() {
+  const inputs = document.querySelectorAll('.enhanced-input');
+  
+  inputs.forEach(input => {
+    // Add floating label effect
+    input.addEventListener('focus', function() {
+      this.parentElement.classList.add('focused');
+    });
+    
+    input.addEventListener('blur', function() {
+      if (!this.value) {
+        this.parentElement.classList.remove('focused');
+      }
+    });
+    
+    // Add typing sound effect (visual)
+    input.addEventListener('input', function() {
+      this.style.boxShadow = '0 0 20px rgba(20, 157, 221, 0.3)';
+      setTimeout(() => {
+        this.style.boxShadow = '';
+      }, 200);
+    });
+  });
+}
+
+// Initialize all animations
+document.addEventListener('DOMContentLoaded', function() {
+  createParticles();
+  enhancedTypingEffect();
+  animateSkillBars();
+  addCardInteractions();
+  smoothScrolling();
+  animateCounters();
+  addImagePlaceholderEffects();
+  enhanceNavigation();
+  addRippleEffects();
+  addScrollRevealAnimations();
+  initializeCrazySubmitButton();
+  enhanceFormInputs();
 });
 
 /**

@@ -48,7 +48,9 @@
         <div class="d-flex flex-column">
 
             <div class="profile">
-                <img src="assets/img/11zon_cropped.png" alt="" class="img-fluid rounded-circle">
+                <div class="profile-img-container">
+                    <img src="assets/img/11zon_cropped.png" alt="Deepak Kumar" class="img-fluid rounded-circle">
+                </div>
                 <h1 class="text-light"><a href="index.html">Deepak Kumar</a></h1>
                 <div class="social-links mt-3 text-center">
                     <a href="https://twitter.com/Im_darsh27" class="twitter"><i class="bx bxl-twitter"></i></a>
@@ -100,8 +102,12 @@
 
                 <div class="row">
                     <div class="col-lg-4" data-aos="fade-right">
-                        <img src="assets/img/11zon_cropped.png
-                        " class="img-fluid" alt="">
+                        <div class="img-placeholder" style="height: 400px; border-radius: 10px;">
+                            <div>
+                                <div>Add your professional photo here</div>
+                                <small>Recommended: 400x400px</small>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
                         <h3>Senior Software Engineer &amp; Full-Stack Developer</h3>
@@ -340,6 +346,12 @@
                 <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="100">
                     <div class="col-lg-4 col-md-6 portfolio-item">
                         <div class="portfolio-wrap">
+                            <div class="project-image img-placeholder">
+                                <div>
+                                    <div>EBG Solutions Screenshot</div>
+                                    <small>Add project screenshot here</small>
+                                </div>
+                            </div>
                             <div class="portfolio-info">
                                 <h4>EBG Solutions Platform</h4>
                                 <p>Enterprise booking platform powering 900+ affiliate sites</p>
@@ -368,6 +380,12 @@
 
                     <div class="col-lg-4 col-md-6 portfolio-item">
                         <div class="portfolio-wrap">
+                            <div class="project-image img-placeholder">
+                                <div>
+                                    <div>CXO Steps Screenshot</div>
+                                    <small>Add project screenshot here</small>
+                                </div>
+                            </div>
                             <div class="portfolio-info">
                                 <h4>CXO Steps Platform</h4>
                                 <p>Online session platform with Zoom SDK integration</p>
@@ -396,6 +414,12 @@
 
                     <div class="col-lg-4 col-md-6 portfolio-item">
                         <div class="portfolio-wrap">
+                            <div class="project-image img-placeholder">
+                                <div>
+                                    <div>Suzuki Motorcycle Screenshot</div>
+                                    <small>Add project screenshot here</small>
+                                </div>
+                            </div>
                             <div class="portfolio-info">
                                 <h4>Suzuki Motorcycle</h4>
                                 <p>Legacy system migration for leading automobile company</p>
@@ -424,6 +448,12 @@
 
                     <div class="col-lg-4 col-md-6 portfolio-item">
                         <div class="portfolio-wrap">
+                            <div class="project-image img-placeholder">
+                                <div>
+                                    <div>Video Processing Tool Demo</div>
+                                    <small>Add tool screenshot/demo here</small>
+                                </div>
+                            </div>
                             <div class="portfolio-info">
                                 <h4>HLS Video Processing Tool</h4>
                                 <p>Python-based video processing for streaming applications</p>
@@ -447,6 +477,12 @@
 
                     <div class="col-lg-4 col-md-6 portfolio-item">
                         <div class="portfolio-wrap">
+                            <div class="project-image img-placeholder">
+                                <div>
+                                    <div>Manastha Platform Screenshot</div>
+                                    <small>Add platform screenshot here</small>
+                                </div>
+                            </div>
                             <div class="portfolio-info">
                                 <h4>Manastha Mental Health Platform</h4>
                                 <p>HIPAA-compliant video sessions for patient-therapist engagement</p>
@@ -475,6 +511,12 @@
 
                     <div class="col-lg-4 col-md-6 portfolio-item">
                         <div class="portfolio-wrap">
+                            <div class="project-image img-placeholder">
+                                <div>
+                                    <div>Bluvial Platform Screenshot</div>
+                                    <small>Add platform screenshot here</small>
+                                </div>
+                            </div>
                             <div class="portfolio-info">
                                 <h4>Bluvial Laboratory Platform</h4>
                                 <p>Online laboratory service booking and appointment system</p>
@@ -695,32 +737,63 @@
                     </div>
 
                     <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-                        <form id="contact-form" action="forms/contact.php" method="post" role="form" class="php-email-form">
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="name">Your Name</label>
-                                    <input type="text" name="name" class="form-control" id="name" required minlength="2" maxlength="100">
+                        <form id="contact-form" action="forms/contact.php" method="post" role="form" class="enhanced-contact-form">
+                            <div class="form-header">
+                                <h3><i class="fas fa-paper-plane"></i> Get In Touch</h3>
+                                <p>Let's discuss your next project together</p>
+                            </div>
+                            
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <div class="input-wrapper">
+                                            <label for="name"><i class="fas fa-user"></i> Your Name</label>
+                                            <input type="text" name="name" class="form-control enhanced-input" id="name" required minlength="2" maxlength="100" placeholder="Enter your full name">
+                                            <div class="input-border"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="input-wrapper">
+                                            <label for="email"><i class="fas fa-envelope"></i> Your Email</label>
+                                            <input type="email" class="form-control enhanced-input" name="email" id="email" required placeholder="your.email@example.com">
+                                            <div class="input-border"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label for="email">Your Email</label>
-                                    <input type="email" class="form-control" name="email" id="email" required>
+                                <div class="form-group">
+                                    <div class="input-wrapper">
+                                        <label for="subject"><i class="fas fa-tag"></i> Subject</label>
+                                        <input type="text" class="form-control enhanced-input" name="subject" id="subject" required minlength="5" maxlength="200" placeholder="What's this about?">
+                                        <div class="input-border"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="subject">Subject</label>
-                                <input type="text" class="form-control" name="subject" id="subject" required minlength="5" maxlength="200">
-                            </div>
-                            <div class="form-group">
-                                <label for="message">Message</label>
-                                <textarea class="form-control" name="message" id="message" rows="10" required minlength="10" maxlength="1000"></textarea>
-                            </div>
-                            <div class="my-3">
-                                <div class="loading" style="display: none;">Sending message...</div>
-                                <div class="error-message" id="error-message" style="display: none;"></div>
-                                <div class="sent-message" id="sent-message" style="display: none;"></div>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" id="submit-btn">Send Message</button>
+                                <div class="form-group">
+                                    <div class="input-wrapper">
+                                        <label for="message"><i class="fas fa-comment-dots"></i> Message</label>
+                                        <textarea class="form-control enhanced-input" name="message" id="message" rows="6" required minlength="10" maxlength="1000" placeholder="Tell me about your project or inquiry..."></textarea>
+                                        <div class="input-border"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-status">
+                                    <div class="loading" style="display: none;">
+                                        <i class="fas fa-spinner fa-spin"></i> Sending message...
+                                    </div>
+                                    <div class="error-message" id="error-message" style="display: none;"></div>
+                                    <div class="sent-message" id="sent-message" style="display: none;"></div>
+                                </div>
+                                
+                                <div class="submit-container">
+                                    <button type="submit" id="submit-btn" class="crazy-submit-btn" disabled>
+                                        <span class="btn-text">
+                                            <i class="fas fa-rocket"></i> Send Message
+                                        </span>
+                                        <div class="btn-particles"></div>
+                                    </button>
+                                    <div class="form-validation-status">
+                                        <span class="validation-text">Complete all fields to unlock the button!</span>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>

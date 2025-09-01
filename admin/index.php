@@ -60,7 +60,7 @@ try {
     $stats_query = "SELECT 
         COUNT(*) as total,
         SUM(CASE WHEN status = 'unread' THEN 1 ELSE 0 END) as unread,
-        SUM(CASE WHEN status = 'read' THEN 1 ELSE 0 END) as read,
+        SUM(CASE WHEN status = 'read' THEN 1 ELSE 0 END) as `read`,
         SUM(CASE WHEN DATE(created_at) = CURDATE() THEN 1 ELSE 0 END) as today
         FROM contacts";
     $stats_stmt = $conn->prepare($stats_query);
@@ -89,18 +89,75 @@ try {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             color: white;
+            transition: all 0.3s ease;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            width: 250px;
+        }
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        .sidebar.collapsed .sidebar-text {
+            display: none;
+        }
+        .sidebar.collapsed .nav-link {
+            text-align: center;
+            padding: 15px 0;
         }
         .sidebar .nav-link {
             color: rgba(255,255,255,0.8);
             transition: all 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
         }
         .sidebar .nav-link:hover, .sidebar .nav-link.active {
             color: white;
             background-color: rgba(255,255,255,0.1);
             border-radius: 8px;
         }
+        .sidebar .nav-link i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+        }
+        .sidebar.collapsed .nav-link i {
+            margin-right: 0;
+        }
         .main-content {
             padding: 20px;
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+        }
+        .main-content.expanded {
+            margin-left: 70px;
+        }
+        .sidebar-toggle {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .sidebar-toggle:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+        .sidebar-toggle.collapsed {
+            left: 25px;
+        }
+        .sidebar-toggle i {
+            font-size: 16px;
+            transition: transform 0.3s ease;
         }
         .stats-card {
             background: white;
@@ -140,29 +197,41 @@ try {
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 sidebar p-0">
-                <div class="p-3">
-                    <h4><i class="fas fa-user-shield"></i> Admin Panel</h4>
-                    <hr style="border-color: rgba(255,255,255,0.3);">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#contacts"><i class="fas fa-envelope"></i> Contact Messages</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+    <!-- Sidebar Toggle Button -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
 
-            <!-- Main Content -->
-            <div class="col-md-9 col-lg-10 main-content">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="p-3">
+            <h4><i class="fas fa-user-shield"></i> <span class="sidebar-text">Admin Panel</span></h4>
+            <hr style="border-color: rgba(255,255,255,0.3);">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" title="Dashboard">
+                        <i class="fas fa-tachometer-alt"></i> 
+                        <span class="sidebar-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contacts" title="Contact Messages">
+                        <i class="fas fa-envelope"></i> 
+                        <span class="sidebar-text">Contact Messages</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php" title="Logout">
+                        <i class="fas fa-sign-out-alt"></i> 
+                        <span class="sidebar-text">Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2>Dashboard</h2>
                     <div>
@@ -347,6 +416,39 @@ try {
                 });
             });
         }
+
+        // Sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+                sidebarToggle.classList.toggle('collapsed');
+                
+                // Change toggle icon
+                const icon = sidebarToggle.querySelector('i');
+                if (sidebar.classList.contains('collapsed')) {
+                    icon.className = 'fas fa-chevron-right';
+                } else {
+                    icon.className = 'fas fa-bars';
+                }
+                
+                // Save state to localStorage
+                localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+            });
+            
+            // Restore sidebar state from localStorage
+            const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            if (isCollapsed) {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
+                sidebarToggle.classList.add('collapsed');
+                sidebarToggle.querySelector('i').className = 'fas fa-chevron-right';
+            }
+        });
     </script>
 </body>
 </html>
