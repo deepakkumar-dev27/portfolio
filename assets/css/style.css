@@ -9,58 +9,127 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+:root {
+  /* Light theme colors */
+  --bg-color: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --text-color: #272829;
+  --text-color-light: #6c757d;
+  --accent-color: #149ddd;
+  --accent-hover: #37b3ed;
+  --border-color: #e9ecef;
+  --card-bg: #ffffff;
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.15);
+  
+  /* Dark theme colors */
+  --dark-bg-primary: #0f1419;
+  --dark-bg-secondary: #1a1f2e;
+  --dark-bg-tertiary: #252a3a;
+  --dark-text-primary: #e6e8eb;
+  --dark-text-secondary: #a8adb8;
+  --dark-text-muted: #6b7280;
+  --dark-accent: #64ffda;
+  --dark-accent-hover: #4fd1c7;
+  --dark-border: #2d3748;
+  --dark-card-bg: #1e2532;
+  --dark-shadow: rgba(0, 0, 0, 0.3);
+}
 
 body {
-    font-family: "Open Sans", sans-serif;
-    color: #272829;
+  font-family: "Open Sans", sans-serif;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  transition: all 0.3s ease;
+}
+
+/* Dark theme styles */
+[data-theme="dark"] {
+  --bg-color: var(--dark-bg-primary);
+  --bg-secondary: var(--dark-bg-secondary);
+  --text-color: var(--dark-text-primary);
+  --text-color-light: var(--dark-text-secondary);
+  --accent-color: var(--dark-accent);
+  --accent-hover: var(--dark-accent-hover);
+  --border-color: var(--dark-border);
+  --card-bg: var(--dark-card-bg);
+  --shadow-light: var(--dark-shadow);
+  --shadow-medium: var(--dark-shadow);
+}
+
+[data-theme="dark"] body {
+  background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #0f1419 100%);
+  background-attachment: fixed;
+  color: var(--dark-text-primary);
+}
+
+[data-theme="dark"] #main {
+  background: transparent;
+}
+
+[data-theme="dark"] .section-bg {
+  background: rgba(26, 31, 46, 0.8) !important;
+  backdrop-filter: blur(10px);
+}
+
+[data-theme="dark"] .resume-item {
+  background: var(--dark-card-bg);
+  border: 1px solid var(--dark-border);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .portfolio-wrap {
+  background: var(--dark-card-bg);
+  border: 1px solid var(--dark-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .stats-card {
+  background: var(--dark-card-bg) !important;
+  border: 1px solid var(--dark-border);
+  color: var(--dark-text-primary);
+}
+
+[data-theme="dark"] .progress-bar-wrap {
+  background: var(--dark-border);
+}
+
+[data-theme="dark"] .progress-bar {
+  background: linear-gradient(135deg, var(--dark-accent), #4fd1c7);
 }
 
 a {
-    color: #149ddd;
-    text-decoration: none;
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 a:hover {
-    color: #37b3ed;
-    text-decoration: none;
+  color: var(--accent-hover);
+  text-decoration: none;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: "Raleway", sans-serif;
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Raleway", sans-serif;
+  color: var(--text-color);
 }
 
 
-/*--------------------------------------------------------------
-# Dark Mode Variables
---------------------------------------------------------------*/
-
-:root {
-    --bg-color: #fff;
-    --text-color: #272829;
-    --card-bg: #fff;
-    --border-color: #e9ecef;
-    --accent-color: #149ddd;
-    --sidebar-bg: #040b14;
+/* Smooth Dark Theme Implementation */
+[data-theme="dark"] .section-bg {
+    background: var(--dark-bg-secondary) !important;
 }
 
-[data-theme="dark"] {
-    --bg-color: #1a1a1a;
-    --text-color: #e0e0e0;
-    --card-bg: #2d2d2d;
-    --border-color: #404040;
-    --accent-color: #37b3ed;
-    --sidebar-bg: #0a0a0a;
+[data-theme="dark"] .section-title h2 {
+    color: var(--dark-text-primary);
 }
 
-body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
+[data-theme="dark"] .section-title p {
+    color: var(--dark-text-secondary);
 }
 
 /*--------------------------------------------------------------
@@ -667,17 +736,41 @@ body {
 
 /* Dark mode adjustments */
 [data-theme="dark"] .enhanced-contact-form {
-    background: linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 100%);
-    border-color: rgba(255,255,255,0.1);
+    background: linear-gradient(135deg, rgba(26, 31, 46, 0.9) 0%, rgba(15, 20, 25, 0.8) 100%);
+    border-color: rgba(100, 255, 218, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 [data-theme="dark"] .enhanced-input {
-    background: rgba(0,0,0,0.2);
-    color: #fff;
+    background: rgba(37, 42, 58, 0.6);
+    color: var(--dark-text-primary);
+    border-color: var(--dark-border);
 }
 
 [data-theme="dark"] .enhanced-input:focus {
-    background: rgba(0,0,0,0.3);
+    background: rgba(37, 42, 58, 0.8);
+    border-color: #64ffda;
+    color: var(--dark-text-primary);
+}
+
+[data-theme="dark"] .enhanced-input::placeholder {
+    color: var(--dark-text-muted);
+}
+
+[data-theme="dark"] .form-header h3 {
+    color: var(--dark-text-primary);
+}
+
+[data-theme="dark"] .form-header p {
+    color: var(--dark-text-secondary);
+}
+
+[data-theme="dark"] .input-wrapper label {
+    color: var(--dark-text-primary);
+}
+
+[data-theme="dark"] .input-wrapper label i {
+    color: #64ffda;
 }
 
 /* Animations */
@@ -808,19 +901,24 @@ body {
 /*--------------------------------------------------------------
 # Header
 --------------------------------------------------------------*/
-
 #header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 300px;
-    transition: all ease-in-out 0.5s;
-    z-index: 9997;
-    transition: all 0.5s;
-    padding: 0 15px;
-    background: #040b14;
-    overflow-y: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 300px;
+  transition: all ease-in-out 0.5s;
+  z-index: 9997;
+  transition: all 0.5s;
+  padding: 0 15px;
+  background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+  overflow-y: auto;
+  border-right: 1px solid var(--dark-border);
+}
+
+[data-theme="dark"] #header {
+  background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+  border-right: 1px solid #2d3748;
 }
 
 #header .profile img {
@@ -972,23 +1070,39 @@ body {
 /*--------------------------------------------------------------
 # Hero Section
 --------------------------------------------------------------*/
-
 #hero {
-    width: 100%;
-    height: 100vh;
-    background: url("../img/nubelson-fernandes--Xqckh_XVU4-unsplash.jpg") top center;
-    background-size: cover;
+width: 100%;
+height: 100vh;
+background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #252a3a 100%);
+background-size: cover;
+position: relative;
 }
 
-#hero:before {
-    content: "";
-    background: rgba(5, 13, 24, 0.3);
-    position: absolute;
-    bottom: 0;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1;
+[data-theme="dark"] #hero {
+background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #252a3a 100%);
+}
+
+#hero::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background: radial-gradient(circle at 30% 70%, rgba(100, 255, 218, 0.1) 0%, transparent 50%),
+radial-gradient(circle at 70% 30%, rgba(79, 209, 199, 0.1) 0%, transparent 50%);
+pointer-events: none;
+}
+
+#hero .hero-overlay {
+  content: "";
+  background: rgba(15, 20, 25, 0.2);
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
 }
 
 #hero .hero-container {
@@ -1002,21 +1116,37 @@ body {
     font-size: 64px;
     font-weight: 700;
     line-height: 56px;
-    color: #fff;
+    color: #e6e8eb;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] #hero h1 {
+    color: #e6e8eb;
 }
 
 #hero p {
-    color: #fff;
+    color: #a8adb8;
     margin-bottom: 50px;
     font-size: 26px;
     font-family: "Poppins", sans-serif;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] #hero p {
+    color: #a8adb8;
 }
 
 #hero p span {
-    color: #fff;
+    color: #64ffda;
     padding-bottom: 4px;
     letter-spacing: 1px;
-    border-bottom: 3px solid #149ddd;
+    border-bottom: 3px solid #64ffda;
+    text-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+}
+
+[data-theme="dark"] #hero p span {
+    color: #64ffda;
+    border-bottom-color: #64ffda;
 }
 
 @media (min-width: 1024px) {
@@ -1142,20 +1272,32 @@ section {
 
 /* Dark mode adjustments for about section */
 [data-theme="dark"] .about {
-  background: rgba(0, 0, 0, 0.85);
-  box-shadow: 0 -5px 20px rgba(255, 255, 255, 0.1);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(26, 31, 46, 0.9);
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(100, 255, 218, 0.2);
 }
 
 [data-theme="dark"] .about::before {
   background: linear-gradient(135deg, 
-    rgba(0, 0, 0, 0.9) 0%, 
-    rgba(20, 20, 20, 0.85) 50%, 
-    rgba(0, 0, 0, 0.9) 100%);
+    rgba(15, 20, 25, 0.95) 0%, 
+    rgba(26, 31, 46, 0.9) 50%, 
+    rgba(15, 20, 25, 0.95) 100%);
 }
 
 [data-theme="dark"] .about .content h3 {
-  color: #149ddd;
+  color: #64ffda;
+}
+
+[data-theme="dark"] .about .content ul li {
+  color: var(--dark-text-secondary);
+}
+
+[data-theme="dark"] .about .content ul strong {
+  color: var(--dark-text-primary);
+}
+
+[data-theme="dark"] .about .content ul i {
+  color: #64ffda;
 }
 
 
@@ -1197,6 +1339,19 @@ section {
     color: #122f57;
 }
 
+/* Dark mode fixes for facts section */
+[data-theme="dark"] .facts .count-box span {
+    color: var(--dark-text-primary);
+}
+
+[data-theme="dark"] .facts .count-box p {
+    color: var(--dark-text-secondary);
+}
+
+[data-theme="dark"] .facts .count-box i {
+    color: #64ffda;
+}
+
 .facts .count-box a {
     font-weight: 600;
     display: block;
@@ -1207,8 +1362,16 @@ section {
     transition: ease-in-out 0.3s;
 }
 
+[data-theme="dark"] .facts .count-box a {
+    color: var(--dark-text-secondary);
+}
+
 .facts .count-box a:hover {
     color: #1f5297;
+}
+
+[data-theme="dark"] .facts .count-box a:hover {
+    color: #64ffda;
 }
 
 
@@ -1231,6 +1394,23 @@ section {
     font-weight: 600;
     font-family: "Poppins", sans-serif;
     color: #050d18;
+}
+
+/* Dark mode fixes for skills section */
+[data-theme="dark"] .skills .progress .skill {
+    color: var(--dark-text-primary);
+}
+
+[data-theme="dark"] .skills .progress .skill .val {
+    color: var(--dark-text-secondary);
+}
+
+[data-theme="dark"] .skills .progress-bar-wrap {
+    background: var(--dark-border);
+}
+
+[data-theme="dark"] .skills .progress-bar {
+    background: linear-gradient(135deg, #64ffda, #4fd1c7);
 }
 
 .skills .progress .skill .val {
@@ -1263,6 +1443,11 @@ section {
     color: #050d18;
 }
 
+/* Dark mode fixes for resume section */
+[data-theme="dark"] .resume .resume-title {
+    color: var(--dark-text-primary);
+}
+
 .resume .resume-item {
     padding: 0 0 20px 20px;
     margin-top: -2px;
@@ -1287,6 +1472,31 @@ section {
     display: inline-block;
     font-weight: 600;
     margin-bottom: 10px;
+}
+
+[data-theme="dark"] .resume .resume-item {
+    border-left-color: #64ffda;
+}
+
+[data-theme="dark"] .resume .resume-item h4 {
+    color: var(--dark-text-primary);
+}
+
+[data-theme="dark"] .resume .resume-item h5 {
+    background: var(--dark-bg-tertiary);
+    color: var(--dark-text-primary);
+}
+
+[data-theme="dark"] .resume .resume-item p {
+    color: var(--dark-text-secondary);
+}
+
+[data-theme="dark"] .resume .resume-item ul li {
+    color: var(--dark-text-secondary);
+}
+
+[data-theme="dark"] .resume .resume-item::before {
+    background: #64ffda;
 }
 
 .resume .resume-item ul {
